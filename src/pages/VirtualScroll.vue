@@ -11,14 +11,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { throttle } from '@/utils/tools'
 
 // 模拟数据
 const data = ref(Array.from({length:1000}))
 // 滚动容器
-const container = ref(null)
+const container = ref()
 // 滚动容器高度
 const containerHeight = ref(0)
 // 列表项高度
@@ -50,8 +50,9 @@ const list = computed(() => {
 
 onMounted(() => {
   containerHeight.value = container.value.getBoundingClientRect().height
-  container.value.addEventListener('scroll', throttle((e) => {
-    scrollTop.value = e.target.scrollTop
+  container.value.addEventListener('scroll', throttle((e: Event) => {
+    const eventTarget = e.target as HTMLElement
+    scrollTop.value = eventTarget.scrollTop
   }, 100))
 })
 
